@@ -1,65 +1,97 @@
 # CLAUDE.md
 
-Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-**Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
+## Project Overview
 
-## 1. Think Before Coding
+TRACE (**T**rade-linked **R**isk **A**ssessment and **C**ontagion **E**ngine) — a multi-source data fusion platform for enterprise credit risk assessment with supply chain contagion modeling, NLP sentiment analysis, and AI Agent interaction. Python 3.10+, SQLite backend, Streamlit frontend.
 
-**Don't assume. Don't hide confusion. Surface tradeoffs.**
+The project is in the **data acquisition** phase. Modeling, dashboard, and agent modules are planned but not yet implemented.
 
-Before implementing:
-- State your assumptions explicitly. If uncertain, ask.
-- If multiple interpretations exist, present them - don't pick silently.
-- If a simpler approach exists, say so. Push back when warranted.
-- If something is unclear, stop. Name what's confusing. Ask.
+## Common Commands
 
-## 2. Simplicity First
+```bash
+# Data acquisition (run individually; some take 1-3 hours)
+python -u src/data_fetcher.py        # Stock daily OHLCV + CSI 300 index + bond yields
+python -u src/financial_fetcher.py    # Balance sheet, income statement, cash flow (all A-shares)
+python -u src/macro_fetcher.py       # GDP, CPI, PMI, M2, SheRong, Shibor
+python -u src/market_quarterly.py    # Quarterly returns, volatility, max drawdown, beta
+python -u src/news_fetcher.py        # CLS telegraph, EastMoney/Sina stock news, CNINFO notices
+python -u src/trade_fetcher.py       # BDI, USD/CNY, import/export, US tariffs, SCFI
 
-**Minimum code that solves the problem. Nothing speculative.**
-
-- No features beyond what was asked.
-- No abstractions for single-use code.
-- No "flexibility" or "configurability" that wasn't requested.
-- No error handling for impossible scenarios.
-- If you write 200 lines and it could be 50, rewrite it.
-
-Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
-
-## 3. Surgical Changes
-
-**Touch only what you must. Clean up only your own mess.**
-
-When editing existing code:
-- Don't "improve" adjacent code, comments, or formatting.
-- Don't refactor things that aren't broken.
-- Match existing style, even if you'd do it differently.
-- If you notice unrelated dead code, mention it - don't delete it.
-
-When your changes create orphans:
-- Remove imports/variables/functions that YOUR changes made unused.
-- Don't remove pre-existing dead code unless asked.
-
-The test: Every changed line should trace directly to the user's request.
-
-## 4. Goal-Driven Execution
-
-**Define success criteria. Loop until verified.**
-
-Transform tasks into verifiable goals:
-- "Add validation" → "Write tests for invalid inputs, then make them pass"
-- "Fix the bug" → "Write a test that reproduces it, then make it pass"
-- "Refactor X" → "Ensure tests pass before and after"
-
-For multi-step tasks, state a brief plan:
-```
-1. [Step] → verify: [check]
-2. [Step] → verify: [check]
-3. [Step] → verify: [check]
+# Financial fetcher supports optional flags:
+python src/financial_fetcher.py --limit 100 --workers 8
 ```
 
-Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
+All scripts output to `data/`. Always use `python -u` for real-time progress output; Python buffering silences it otherwise.
 
----
+## Architecture
 
-**These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
+### Data Acquisition Modules (src/)
+
+| Module | Source API | Output (data/) | Time Coverage |
+|--------|-----------|----------------|---------------|
+| `data_fetcher.py` | yfinance + akshare | `stock_daily.csv`, `csi300_index_daily.csv`, `bond_yields.csv` | 2021-07+ |
+| `financial_fetcher.py` | akshare (EastMoney) | `balance_sheet.csv`, `income_statement.csv`, `cash_flow_statement.csv` | 2018+ |
+| `macro_fetcher.py` | akshare + EastMoney API | `gdp.csv`, `cpi.csv`, `pmi.csv`, `m2.csv`, `shero.csv`, `shibor.csv`, `macro_quarterly.csv` | 2020+ |
+| `market_quarterly.py` | Derived from `stock_daily.csv` + `csi300_index_daily.csv` | `market_quarterly.csv` | 2021Q3+ |
+| `news_fetcher.py` | akshare + Sina/CLS APIs | `news_raw.csv` | 2020+ |
+| `trade_fetcher.py` | akshare + direct APIs | `bdi.csv`, `usdcny_daily.csv`, `trade_monthly.csv`, `trade_quarterly.csv`, `freight_weekly.csv`, `freight_quarterly.csv`, `us_tariffs.csv`, `scfi_latest.csv` | 2020+ |
+
+### Module Dependency Chain
+
+```
+data_fetcher.py ──→ stock_daily.csv ──→ market_quarterly.py ──→ market_quarterly.csv
+                  └─ csi300_index_daily.csv ──┘
+
+financial_fetcher.py ──→ balance_sheet.csv, income_statement.csv, cash_flow_statement.csv
+
+macro_fetcher.py ──→ gdp.csv, cpi.csv, pmi.csv, m2.csv, shero.csv, shibor.csv
+                  └─ macro_quarterly.csv (merged)
+
+news_fetcher.py ──→ news_raw.csv
+
+trade_fetcher.py ──→ bdi.csv, usdcny_daily.csv, trade_*.csv, freight_*.csv, us_tariffs.csv
+```
+
+### Key Data Files (>10MB, gitignored)
+
+| File | Size | Rows | Description |
+|------|------|------|-------------|
+| `stock_daily.csv` | 621MB | 6.5M | Full A-share daily OHLCV, 5500 stocks |
+| `balance_sheet.csv` | 42MB | — | Quarterly balance sheets |
+| `income_statement.csv` | 35MB | — | Quarterly income statements |
+| `cash_flow_statement.csv` | 30MB | — | Quarterly cash flow statements |
+| `news_raw.csv` | 38MB | 364K | News titles with date/code/source |
+| `market_quarterly.csv` | 12MB | 97K | Quarterly returns, vol, drawdown, beta |
+
+### Stock Code Convention
+
+All modules use `000001.SZ` format (Tushare convention). yfinance requires `.SS` for Shanghai; the converter `_make_yf_tickers()` in `data_fetcher.py` handles this. Helper `_normalize_code()` exists in `news_fetcher.py` and `market_quarterly.py`.
+
+## Important Conventions
+
+- **Proxy**: `data_fetcher.py` sets `HTTP_PROXY=http://127.0.0.1:7897`. Other modules don't need it (akshare uses different transport).
+- **Encoding**: All CSV output uses `utf-8-sig` (BOM for Excel compatibility on Windows).
+- **Date format**: Always `YYYY-MM-DD` in output CSVs; raw APIs may differ (parse to unified format).
+- **Floating precision**: All macro/quarterly numeric columns are rounded to 2 decimal places via `.round(2)`.
+- **Quarter labels**: `2020Q1` format throughout — generated by `f"{year}Q{(month-1)//3+1}"`.
+- **Quarterly completeness**: Monthly-sourced indicators (CPI, PMI, M2) require ≥2 months per quarter via `_quarterly_agg()`. Daily-sourced (Shibor) have no minimum.
+- **GDP convention**: Q1 = single-quarter real YoY; Q2-Q4 = cumulative real YoY (China standard reporting, from akshare `国内生产总值-同比增长` column).
+
+### Known Data Limitations
+
+- `shero.csv` (社融) only has data through 2025Q4 — akshare source hasn't published 2026 data yet.
+- `stock_news_em` returns only ~10 recent items per stock; historical depth comes from `stock_notice_report` (CNINFO corporate announcements, monthly sampled since 2020).
+- `stock_info_global_cls` (CLS telegraph) returns only 20 recent items, market-level only (no per-stock code linkage).
+- GDP Q2-Q4 values are cumulative growth rates, not single-quarter. This is the standard Chinese statistical reporting convention.
+
+## Behavioral Guidelines
+
+These override default LLM behavior:
+
+1. **Think before coding** — State assumptions, surface tradeoffs, ask when unclear.
+2. **Simplicity first** — Minimum code, no speculative features, no premature abstractions.
+3. **Surgical changes** — Touch only what's needed, match existing style, don't "improve" adjacent code.
+4. **Goal-driven execution** — Define verifiable success criteria, loop until verified.
+5. **Don't guess APIs** — Test small samples before full runs. Data acquisition scripts take hours; a broken full run wastes time.
