@@ -1,0 +1,336 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - link [ref=e4] [cursor=pointer]:
+      - /url: /
+    - link "English" [ref=e5] [cursor=pointer]:
+      - /url: http://en.sse.net.cn/
+    - link "产品与服务" [ref=e6] [cursor=pointer]:
+      - /url: /service
+    - link "数据中心" [ref=e7] [cursor=pointer]:
+      - /url: /datacenter
+    - link "关于我们" [ref=e9] [cursor=pointer]:
+      - /url: /about
+    - link "▪登录" [ref=e10] [cursor=pointer]:
+      - /url: /login
+    - img [ref=e11]
+  - generic [ref=e12]:
+    - generic:
+      - generic:
+        - list [ref=e14]:
+          - listitem [ref=e15]:
+            - generic [ref=e16] [cursor=pointer]: 指数简介/公告/版权声明
+          - listitem [ref=e17]:
+            - link "运价指数公示公告" [ref=e18] [cursor=pointer]:
+              - /url: /indexIntro?indexName=bulletins
+          - listitem [ref=e19]:
+            - link "指数版权声明" [ref=e20] [cursor=pointer]:
+              - /url: /indexIntro?indexName=copyright
+          - listitem [ref=e21]:
+            - generic [ref=e22] [cursor=pointer]:
+              - text: 指数简介
+              - generic [ref=e23]: 
+          - listitem [ref=e24]:
+            - generic [ref=e25] [cursor=pointer]:
+              - text: 指数查询
+              - generic [ref=e26]: 
+            - list [ref=e27]:
+              - listitem [ref=e28]:
+                - link "中国出口集装箱运价指数" [ref=e29] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=ccfi
+              - listitem [ref=e30]:
+                - link "上海出口集装箱运价指数" [ref=e31] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=scfi
+              - listitem [ref=e32]:
+                - link "上海出口集装箱结算运价指数" [ref=e33] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=scfis
+              - listitem [ref=e34]:
+                - link "中国进口集装箱运价指数" [ref=e35] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=cicfi
+              - listitem [ref=e36]:
+                - link "台湾海峡两岸间集装箱运价指数" [ref=e37] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=twfi
+              - listitem [ref=e38]:
+                - link "东南亚集装箱运价指数" [ref=e39] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=seafi
+              - listitem [ref=e40]:
+                - link "全球集装箱班轮准班率" [ref=e41] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=gcspi
+              - listitem [ref=e42]:
+                - link "主干航线准班率" [ref=e43] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=gcspi
+              - listitem [ref=e44]:
+                - link "班轮公司及联盟准班率" [ref=e45] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=gcspi_ca
+              - listitem [ref=e46]:
+                - link "港口班轮准班率" [ref=e47] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=gcspi_port
+              - listitem [ref=e48]:
+                - link "中国沿海散货运价指数" [ref=e49] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=cbfi
+              - listitem [ref=e50]:
+                - link "中国沿海煤炭运价指数" [ref=e51] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=cbcfi
+              - listitem [ref=e52]:
+                - link "中国沿海金属矿石运价指数" [ref=e53] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=cbofi
+              - listitem [ref=e54]:
+                - link "中国沿海粮食运价指数" [ref=e55] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=cbgfi
+              - listitem [ref=e56]:
+                - link "中国沿海成品油运价指数" [ref=e57] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=cctfi_coastal
+              - listitem [ref=e58]:
+                - link "中国沿海散货船舶日租金指数" [ref=e59] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=cdi
+              - listitem [ref=e60]:
+                - link "远东干散货指数" [ref=e61] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=fdi
+              - listitem [ref=e62]:
+                - link "中国进口干散货运价指数" [ref=e63] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=cdfi
+              - listitem [ref=e64]:
+                - link "中国进口原油运价指数" [ref=e65] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=ctfi
+              - listitem [ref=e66]:
+                - link "中国（上海）进口贸易海运指数" [ref=e67] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=csi
+              - listitem [ref=e68]:
+                - link "“一带一路”航贸指数" [ref=e69] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=brsti
+              - listitem [ref=e70]:
+                - link "“一带一路”贸易额指数" [ref=e71] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=brtvi
+              - listitem [ref=e72]:
+                - link "“一带一路”集装箱海运量指数" [ref=e73] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=brcvi
+              - listitem [ref=e74]:
+                - link "“海上丝绸之路”运价指数" [ref=e75] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=srfi
+              - listitem [ref=e76]:
+                - link "中国（上海）国际海员薪酬指数" [ref=e77] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=ccri
+        - generic [ref=e78]:
+          - generic [ref=e79]:
+            - list:
+              - listitem [ref=e80]: 单期查询
+              - listitem [ref=e81]:
+                - link "多期查询" [ref=e82] [cursor=pointer]:
+                  - /url: /index/scfilist
+              - listitem [ref=e83]:
+                - link "挂钩合同" [ref=e84] [cursor=pointer]:
+                  - /url: /indexIntro?indexName=scfi&changeNo=4
+          - link "指数简介" [ref=e85] [cursor=pointer]:
+            - /url: /indexIntro?indexName=scfi
+          - img [ref=e87]
+          - generic [ref=e89]:
+            - text: 指数查询（请输入指数日期）：
+            - textbox "2026-05-26" [ref=e90]
+            - button "查询" [ref=e91]
+          - generic [ref=e92]: 上海出口集装箱运价指数SHANGHAI CONTAINERIZED FREIGHT INDEX
+          - table [ref=e93]:
+            - rowgroup [ref=e94]:
+              - row "航线 单位 权重 上期 2026-05-15 本期 2026-05-22 与上期比涨跌" [ref=e95]:
+                - cell "航线" [ref=e96]
+                - cell "单位" [ref=e97]: 单位
+                - cell "权重" [ref=e98]: 权重
+                - cell "上期 2026-05-15" [ref=e99]:
+                  - text: 上期
+                  - text: 2026-05-15
+                - cell "本期 2026-05-22" [ref=e100]:
+                  - text: 本期
+                  - text: 2026-05-22
+                - cell "与上期比涨跌" [ref=e101]
+              - row "综合指数 Comprehensive Index 2140.66 2218.15 77.49" [ref=e102]:
+                - cell "综合指数 Comprehensive Index" [ref=e103]
+                - cell [ref=e104]
+                - cell [ref=e105]
+                - cell "2140.66" [ref=e106]
+                - cell "2218.15" [ref=e107]
+                - cell "77.49" [ref=e108]
+              - row "分航线 (Line Service):" [ref=e109]:
+                - cell "分航线 (Line Service):" [ref=e110]
+                - cell [ref=e111]
+                - cell [ref=e112]
+                - cell [ref=e113]
+                - cell [ref=e114]
+                - cell [ref=e115]
+              - row "欧洲（基本港） Europe (Base port) USD/TEU 20.0%" [ref=e116]:
+                - cell "欧洲（基本港） Europe (Base port)" [ref=e117]:
+                  - paragraph [ref=e118]: 欧洲（基本港）
+                  - paragraph [ref=e119]: Europe (Base port)
+                - cell "USD/TEU" [ref=e120]
+                - cell "20.0%" [ref=e121]
+                - cell [ref=e122]
+                - cell [ref=e123]
+                - cell [ref=e124]
+              - row "地中海（基本港） Mediterranean (Base port) USD/TEU 10.0%" [ref=e125]:
+                - cell "地中海（基本港） Mediterranean (Base port)" [ref=e126]:
+                  - paragraph [ref=e127]: 地中海（基本港）
+                  - paragraph [ref=e128]: Mediterranean (Base port)
+                - cell "USD/TEU" [ref=e129]
+                - cell "10.0%" [ref=e130]
+                - cell [ref=e131]
+                - cell [ref=e132]
+                - cell [ref=e133]
+              - row "美西（基本港） USWC (Base port) USD/FEU 20.0%" [ref=e134]:
+                - cell "美西（基本港） USWC (Base port)" [ref=e135]:
+                  - paragraph [ref=e136]: 美西（基本港）
+                  - paragraph [ref=e137]: USWC (Base port)
+                - cell "USD/FEU" [ref=e138]
+                - cell "20.0%" [ref=e139]
+                - cell [ref=e140]
+                - cell [ref=e141]
+                - cell [ref=e142]
+              - row "美东（基本港） USEC (Base port) USD/FEU 7.5%" [ref=e143]:
+                - cell "美东（基本港） USEC (Base port)" [ref=e144]:
+                  - paragraph [ref=e145]: 美东（基本港）
+                  - paragraph [ref=e146]: USEC (Base port)
+                - cell "USD/FEU" [ref=e147]
+                - cell "7.5%" [ref=e148]
+                - cell [ref=e149]
+                - cell [ref=e150]
+                - cell [ref=e151]
+              - row "波斯湾（迪拜） Persian Gulf and Red Sea (Dubai) USD/TEU 7.5%" [ref=e152]:
+                - cell "波斯湾（迪拜） Persian Gulf and Red Sea (Dubai)" [ref=e153]:
+                  - paragraph [ref=e154]: 波斯湾（迪拜）
+                  - paragraph [ref=e155]: Persian Gulf and Red Sea (Dubai)
+                - cell "USD/TEU" [ref=e156]
+                - cell "7.5%" [ref=e157]
+                - cell [ref=e158]
+                - cell [ref=e159]
+                - cell [ref=e160]
+              - row "澳新（墨尔本） Australia/New Zealand (Melbourne) USD/TEU 5.0%" [ref=e161]:
+                - cell "澳新（墨尔本） Australia/New Zealand (Melbourne)" [ref=e162]:
+                  - paragraph [ref=e163]: 澳新（墨尔本）
+                  - paragraph [ref=e164]: Australia/New Zealand (Melbourne)
+                - cell "USD/TEU" [ref=e165]
+                - cell "5.0%" [ref=e166]
+                - cell [ref=e167]
+                - cell [ref=e168]
+                - cell [ref=e169]
+              - row "西非（拉各斯） West Africa (Lagos) USD/TEU 2.5%" [ref=e170]:
+                - cell "西非（拉各斯） West Africa (Lagos)" [ref=e171]:
+                  - paragraph [ref=e172]: 西非（拉各斯）
+                  - paragraph [ref=e173]: West Africa (Lagos)
+                - cell "USD/TEU" [ref=e174]
+                - cell "2.5%" [ref=e175]
+                - cell [ref=e176]
+                - cell [ref=e177]
+                - cell [ref=e178]
+              - row "南非（德班） South Africa (Durban) USD/TEU 2.5%" [ref=e179]:
+                - cell "南非（德班） South Africa (Durban)" [ref=e180]:
+                  - paragraph [ref=e181]: 南非（德班）
+                  - paragraph [ref=e182]: South Africa (Durban)
+                - cell "USD/TEU" [ref=e183]
+                - cell "2.5%" [ref=e184]
+                - cell [ref=e185]
+                - cell [ref=e186]
+                - cell [ref=e187]
+              - row "南美（桑托斯） South America (Santos) USD/TEU 5.0%" [ref=e188]:
+                - cell "南美（桑托斯） South America (Santos)" [ref=e189]:
+                  - paragraph [ref=e190]: 南美（桑托斯）
+                  - paragraph [ref=e191]: South America (Santos)
+                - cell "USD/TEU" [ref=e192]
+                - cell "5.0%" [ref=e193]
+                - cell [ref=e194]
+                - cell [ref=e195]
+                - cell [ref=e196]
+              - row "日本关西（基本港） West Japan (Base port) USD/TEU 5.0%" [ref=e197]:
+                - cell "日本关西（基本港） West Japan (Base port)" [ref=e198]:
+                  - paragraph [ref=e199]: 日本关西（基本港）
+                  - paragraph [ref=e200]: West Japan (Base port)
+                - cell "USD/TEU" [ref=e201]
+                - cell "5.0%" [ref=e202]
+                - cell [ref=e203]
+                - cell [ref=e204]
+                - cell [ref=e205]
+              - row "日本关东（基本港） East Japan (Base port) USD/TEU 5.0%" [ref=e206]:
+                - cell "日本关东（基本港） East Japan (Base port)" [ref=e207]:
+                  - paragraph [ref=e208]: 日本关东（基本港）
+                  - paragraph [ref=e209]: East Japan (Base port)
+                - cell "USD/TEU" [ref=e210]
+                - cell "5.0%" [ref=e211]
+                - cell [ref=e212]
+                - cell [ref=e213]
+                - cell [ref=e214]
+              - row "东南亚（新加坡） Southeast Asia (Singapore) USD/TEU 7.5%" [ref=e215]:
+                - cell "东南亚（新加坡） Southeast Asia (Singapore)" [ref=e216]:
+                  - paragraph [ref=e217]: 东南亚（新加坡）
+                  - paragraph [ref=e218]: Southeast Asia (Singapore)
+                - cell "USD/TEU" [ref=e219]
+                - cell "7.5%" [ref=e220]
+                - cell [ref=e221]
+                - cell [ref=e222]
+                - cell [ref=e223]
+              - row "韩国（釜山） Korea (Pusan) USD/TEU 2.5%" [ref=e224]:
+                - cell "韩国（釜山） Korea (Pusan)" [ref=e225]:
+                  - paragraph [ref=e226]: 韩国（釜山）
+                  - paragraph [ref=e227]: Korea (Pusan)
+                - cell "USD/TEU" [ref=e228]
+                - cell "2.5%" [ref=e229]
+                - cell [ref=e230]
+                - cell [ref=e231]
+                - cell [ref=e232]
+              - row "中南美(曼萨尼约) Central/South America West Coast(Manzanillo) USD/TEU 0.0%" [ref=e233]:
+                - cell "中南美(曼萨尼约) Central/South America West Coast(Manzanillo)" [ref=e234]:
+                  - paragraph [ref=e235]: 中南美(曼萨尼约)
+                  - paragraph [ref=e236]: Central/South America West Coast(Manzanillo)
+                - cell "USD/TEU" [ref=e237]
+                - cell "0.0%" [ref=e238]
+                - cell [ref=e239]
+                - cell [ref=e240]
+                - cell [ref=e241]
+              - row "东非(蒙巴萨) East Africa(Mombasa) USD/TEU 0.0%" [ref=e242]:
+                - cell "东非(蒙巴萨) East Africa(Mombasa)" [ref=e243]:
+                  - paragraph [ref=e244]: 东非(蒙巴萨)
+                  - paragraph [ref=e245]: East Africa(Mombasa)
+                - cell "USD/TEU" [ref=e246]
+                - cell "0.0%" [ref=e247]
+                - cell [ref=e248]
+                - cell [ref=e249]
+                - cell [ref=e250]
+          - generic [ref=e251]:
+            - generic [ref=e252]:
+              - text: 上海航运交易所版权所有，未经许可，不得转载或者用于任何形式的商业用途
+              - text: 如需订购，请洽：
+              - text: 陈女士 021-65151166 - 2376 ssebu_editor05@sse.net.cn
+              - text: 姜先生 021-65151166 - 2356 jiangt@sse.net.cn
+              - text: 昝先生 021-65151166 - 2352 zhanj@sse.net.cn
+              - link "点击了解更多信息产品" [ref=e253] [cursor=pointer]:
+                - /url: https://www.sse.net.cn/cninfo/about/dynamic/202111/t20211112_1359744.jsp
+              - text: "备注：分航线运价包含海运费及海运相关附加费，具体包括下列附加费:"
+              - text: "Note: The freight rate includes ocean freight and surcharges, i.e.:"
+              - text: 1、燃油附加费（BAF/FAF/LSS*） 2、紧急燃油附加费（EBS/EBA) 3、币值附加费（CAF/YAS） 4、旺季附加费（PSS） 5、战争附加费（WRS） 6、港口拥挤附加费（PCS） 7、运河附加费（SCS/SCF/PTF/PCC） *自2014年末起包含低硫附加费（LSS）
+              - text: "基本港：选择该航线基本港的运价进行报送，Base Port: Report Freight Rates of Base Ports 如: 地中海－巴塞罗那/瓦伦西亚/热那亚/那不勒斯 Mediterranean Sea-Barcelona/Valencia/Genoa/Naples 欧洲－汉堡/鹿特丹/安特卫普/弗利克斯托/勒阿弗尔 Europe-Hamburg/Rotterdam/Antwerp/Felixstowe/Le Havre 美西－洛杉矶/长滩/奥克兰 USWC-Los Angeles/Long Beach/Oakland 美东－纽约/萨凡纳/诺福克/查尔斯顿 USEC-New York/Savannah/Norfolk/Charleston 日本关西－大阪/神户；日本关东－东京/横滨 West Japan-Osaka/Kobe East Japan-Tokyo/Yokohama"
+            - generic [ref=e254]: 上海航运交易所聘请了毕马威对上海出口集装箱运价指数的编制和发布工作的内容控制进行检查，毕马威会计师事务所出具了截止至2010年7月31日的SAS70第一类报告。
+    - generic [ref=e256]:
+      - generic [ref=e257]:
+        - generic [ref=e258]:
+          - generic [ref=e259]:
+            - link "中华航运网" [ref=e260] [cursor=pointer]:
+              - /url: http://www.chineseshipping.com.cn
+            - link "中华船舶交易网" [ref=e261] [cursor=pointer]:
+              - /url: http://www.cn-eship.com
+          - combobox [ref=e262]:
+            - option "政府部门网站" [selected]
+            - option "中华人民共和国交通运输部"
+            - option "上海市交通委员会"
+          - combobox [ref=e263]:
+            - option "友情链接" [selected]
+            - option "上海航运运价交易有限公司"
+            - option "中国集装箱行业协会"
+        - generic [ref=e264]:
+          - link "联系方式" [ref=e265] [cursor=pointer]:
+            - /url: /about#msg5
+          - generic [ref=e266]: 电话：021-65151166 传真：021-65152291 邮箱：supportꅄsse.net.cn
+          - link "网站地图" [ref=e267] [cursor=pointer]:
+            - /url: /sitemap.jsp
+        - generic [ref=e268]:
+          - link "沪ICP备：沪B2-20050110-3" [ref=e269] [cursor=pointer]:
+            - /url: https://beian.miit.gov.cn
+          - link "沪公网安备 31022102000187号" [ref=e270] [cursor=pointer]:
+            - /url: http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=31022102000187
+            - img [ref=e271]
+            - text: 沪公网安备 31022102000187号
+      - link [ref=e273] [cursor=pointer]:
+        - /url: http://bszs.conac.cn/sitename?method=show&id=2801B669B8E679BCE053012819AC793D

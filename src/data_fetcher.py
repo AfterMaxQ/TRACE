@@ -109,6 +109,8 @@ def fetch_all_stocks_yf(csv_path: str | None = None,
                 chunk.columns = [c.lower() for c in chunk.columns]
                 chunk["ticker"] = batch[0]
                 melted = chunk.reset_index()
+                if melted.columns[0] not in ("Date", "date"):
+                    melted = melted.rename(columns={melted.columns[0]: "Date"})
 
             all_frames.append(melted)
             print(f"  [{batch_num}/{total_batches}] OK ({len(melted)} 条, {melted['ticker'].nunique()} 只)")
@@ -168,6 +170,9 @@ def _melt_yf_multiticker(chunk: pd.DataFrame) -> pd.DataFrame:
         sub.columns = [c.lower() for c in sub.columns]
         sub["ticker"] = t
         sub = sub.reset_index()
+        # yfinance 不同版本返回的 index name 可能为 None/Date/date
+        if sub.columns[0] not in ("Date", "date"):
+            sub = sub.rename(columns={sub.columns[0]: "Date"})
         frames.append(sub)
     return pd.concat(frames, ignore_index=True)
 

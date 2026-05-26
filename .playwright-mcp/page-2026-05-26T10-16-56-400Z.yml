@@ -1,0 +1,399 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - link [ref=e4] [cursor=pointer]:
+      - /url: /
+    - link "English" [ref=e5] [cursor=pointer]:
+      - /url: http://en.sse.net.cn/
+    - link "产品与服务" [ref=e6] [cursor=pointer]:
+      - /url: /service
+    - link "数据中心" [ref=e7] [cursor=pointer]:
+      - /url: /datacenter
+    - link "关于我们" [ref=e9] [cursor=pointer]:
+      - /url: /about
+    - link "▪登录" [ref=e10] [cursor=pointer]:
+      - /url: /login
+    - img [ref=e11]
+  - generic:
+    - generic:
+      - generic:
+        - list [ref=e13]:
+          - listitem [ref=e14]:
+            - generic [ref=e15] [cursor=pointer]: 指数简介/公告/版权声明
+          - listitem [ref=e16]:
+            - link "运价指数公示公告" [ref=e17] [cursor=pointer]:
+              - /url: /indexIntro?indexName=bulletins
+          - listitem [ref=e18]:
+            - link "指数版权声明" [ref=e19] [cursor=pointer]:
+              - /url: /indexIntro?indexName=copyright
+          - listitem [ref=e20]:
+            - generic [ref=e21] [cursor=pointer]:
+              - text: 指数简介
+              - generic [ref=e22]: 
+          - listitem [ref=e23]:
+            - generic [ref=e24] [cursor=pointer]:
+              - text: 指数查询
+              - generic [ref=e25]: 
+            - list [ref=e26]:
+              - listitem [ref=e27]:
+                - link "中国出口集装箱运价指数" [ref=e28] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=ccfi
+              - listitem [ref=e29]:
+                - link "上海出口集装箱运价指数" [ref=e30] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=scfi
+              - listitem [ref=e31]:
+                - link "上海出口集装箱结算运价指数" [ref=e32] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=scfis
+              - listitem [ref=e33]:
+                - link "中国进口集装箱运价指数" [ref=e34] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=cicfi
+              - listitem [ref=e35]:
+                - link "台湾海峡两岸间集装箱运价指数" [ref=e36] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=twfi
+              - listitem [ref=e37]:
+                - link "东南亚集装箱运价指数" [ref=e38] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=seafi
+              - listitem [ref=e39]:
+                - link "全球集装箱班轮准班率" [ref=e40] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=gcspi
+              - listitem [ref=e41]:
+                - link "主干航线准班率" [ref=e42] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=gcspi
+              - listitem [ref=e43]:
+                - link "班轮公司及联盟准班率" [ref=e44] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=gcspi_ca
+              - listitem [ref=e45]:
+                - link "港口班轮准班率" [ref=e46] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=gcspi_port
+              - listitem [ref=e47]:
+                - link "中国沿海散货运价指数" [ref=e48] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=cbfi
+              - listitem [ref=e49]:
+                - link "中国沿海煤炭运价指数" [ref=e50] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=cbcfi
+              - listitem [ref=e51]:
+                - link "中国沿海金属矿石运价指数" [ref=e52] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=cbofi
+              - listitem [ref=e53]:
+                - link "中国沿海粮食运价指数" [ref=e54] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=cbgfi
+              - listitem [ref=e55]:
+                - link "中国沿海成品油运价指数" [ref=e56] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=cctfi_coastal
+              - listitem [ref=e57]:
+                - link "中国沿海散货船舶日租金指数" [ref=e58] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=cdi
+              - listitem [ref=e59]:
+                - link "远东干散货指数" [ref=e60] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=fdi
+              - listitem [ref=e61]:
+                - link "中国进口干散货运价指数" [ref=e62] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=cdfi
+              - listitem [ref=e63]:
+                - link "中国进口原油运价指数" [ref=e64] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=ctfi
+              - listitem [ref=e65]:
+                - link "中国（上海）进口贸易海运指数" [ref=e66] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=csi
+              - listitem [ref=e67]:
+                - link "“一带一路”航贸指数" [ref=e68] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=brsti
+              - listitem [ref=e69]:
+                - link "“一带一路”贸易额指数" [ref=e70] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=brtvi
+              - listitem [ref=e71]:
+                - link "“一带一路”集装箱海运量指数" [ref=e72] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=brcvi
+              - listitem [ref=e73]:
+                - link "“海上丝绸之路”运价指数" [ref=e74] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=srfi
+              - listitem [ref=e75]:
+                - link "中国（上海）国际海员薪酬指数" [ref=e76] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=ccri
+        - generic [ref=e77]:
+          - generic [ref=e78]:
+            - list:
+              - listitem [ref=e79]:
+                - link "单期查询" [ref=e80] [cursor=pointer]:
+                  - /url: /index/singleIndex?indexType=scfi
+              - listitem [ref=e81]: 多期查询
+              - listitem [ref=e82]:
+                - link "挂钩合同" [ref=e83] [cursor=pointer]:
+                  - /url: /indexIntro?indexName=scfi&changeNo=4
+          - generic [ref=e84]:
+            - generic [ref=e85]:
+              - text: 请输入时间：（YYYY-MM-DD）
+              - generic [ref=e86]:
+                - text: 从：
+                - textbox [ref=e87]: 2026-02-26
+                - text: 至：
+                - textbox [ref=e88]: 2026-05-26
+            - generic [ref=e89]:
+              - generic [ref=e90]: 请选择服务：
+              - generic [ref=e91]:
+                - text: T
+                - checkbox [ref=e92]
+                - text: 综合指数
+            - generic [ref=e93]:
+              - generic [ref=e94]:
+                - text: L1
+                - checkbox [ref=e95]
+                - text: 欧洲（基本港）
+              - generic [ref=e96]:
+                - text: L2
+                - checkbox [ref=e97]
+                - text: 地中海（基本港）
+            - generic [ref=e98]:
+              - generic [ref=e99]:
+                - text: L3
+                - checkbox [ref=e100]
+                - text: 美西（基本港）
+              - generic [ref=e101]:
+                - text: L4
+                - checkbox [ref=e102]
+                - text: 美东（基本港）
+            - generic [ref=e103]:
+              - generic [ref=e104]:
+                - text: L5
+                - checkbox [ref=e105]
+                - text: 波斯湾（迪拜）
+              - generic [ref=e106]:
+                - text: L6
+                - checkbox [ref=e107]
+                - text: 澳新（墨尔本）
+            - generic [ref=e108]:
+              - generic [ref=e109]:
+                - text: L7
+                - checkbox [ref=e110]
+                - text: 西非（拉各斯）
+              - generic [ref=e111]:
+                - text: L8
+                - checkbox [ref=e112]
+                - text: 南非（德班）
+            - generic [ref=e113]:
+              - generic [ref=e114]:
+                - text: L9
+                - checkbox [ref=e115]
+                - text: 南美（桑托斯）
+              - generic [ref=e116]:
+                - text: L10
+                - checkbox [ref=e117]
+                - text: 日本关西（基本港）
+            - generic [ref=e118]:
+              - generic [ref=e119]:
+                - text: L11
+                - checkbox [ref=e120]
+                - text: 日本关东（基本港）
+              - generic [ref=e121]:
+                - text: L12
+                - checkbox [ref=e122]
+                - text: 东南亚（新加坡）
+            - generic [ref=e123]:
+              - generic [ref=e124]:
+                - text: L13
+                - checkbox [ref=e125]
+                - text: 韩国（釜山）
+              - generic [ref=e126]:
+                - text: L14
+                - checkbox [ref=e127]
+                - text: 台湾（高雄）
+            - generic [ref=e128]:
+              - generic [ref=e129]:
+                - text: L15
+                - checkbox [ref=e130]
+                - text: 香港（香港）
+              - generic [ref=e131]:
+                - text: L25
+                - checkbox [ref=e132]
+                - text: 中南美(曼萨尼约)
+            - generic [ref=e134]:
+              - text: L26
+              - checkbox [ref=e135]
+              - text: 东非(蒙巴萨)
+            - table [ref=e136]:
+              - rowgroup [ref=e137]:
+                - row
+                - row "查 询 重置" [ref=e138]:
+                  - cell "查 询 重置" [ref=e139]:
+                    - generic [ref=e140]:
+                      - button "查 询" [ref=e141]
+                      - button "重置" [ref=e142]
+          - generic [ref=e143]: 上海出口集装箱运价指数SHANGHAI CONTAINERIZED FREIGHT INDEX
+          - table [ref=e144]:
+            - rowgroup [ref=e145]:
+              - row "时间 (YYYY-MM-DD)" [ref=e146]:
+                - cell "时间 (YYYY-MM-DD)" [ref=e147]:
+                  - text: 时间
+                  - text: (YYYY-MM-DD)
+                - cell [ref=e148]
+                - cell [ref=e149]
+                - cell [ref=e150]
+                - cell [ref=e151]
+                - cell [ref=e152]
+                - cell [ref=e153]
+              - row [ref=e154]:
+                - cell [ref=e155]
+                - cell [ref=e156]
+                - cell [ref=e157]
+                - cell [ref=e158]
+                - cell [ref=e159]
+                - cell [ref=e160]
+                - cell [ref=e161]
+              - row [ref=e162]:
+                - cell [ref=e163]
+                - cell [ref=e164]
+                - cell [ref=e165]
+                - cell [ref=e166]
+                - cell [ref=e167]
+                - cell [ref=e168]
+                - cell [ref=e169]
+              - row [ref=e170]:
+                - cell [ref=e171]
+                - cell [ref=e172]
+                - cell [ref=e173]
+                - cell [ref=e174]
+                - cell [ref=e175]
+                - cell [ref=e176]
+                - cell [ref=e177]
+              - row [ref=e178]:
+                - cell [ref=e179]
+                - cell [ref=e180]
+                - cell [ref=e181]
+                - cell [ref=e182]
+                - cell [ref=e183]
+                - cell [ref=e184]
+                - cell [ref=e185]
+              - row [ref=e186]:
+                - cell [ref=e187]
+                - cell [ref=e188]
+                - cell [ref=e189]
+                - cell [ref=e190]
+                - cell [ref=e191]
+                - cell [ref=e192]
+                - cell [ref=e193]
+              - row [ref=e194]:
+                - cell [ref=e195]
+                - cell [ref=e196]
+                - cell [ref=e197]
+                - cell [ref=e198]
+                - cell [ref=e199]
+                - cell [ref=e200]
+                - cell [ref=e201]
+              - row [ref=e202]:
+                - cell [ref=e203]
+                - cell [ref=e204]
+                - cell [ref=e205]
+                - cell [ref=e206]
+                - cell [ref=e207]
+                - cell [ref=e208]
+                - cell [ref=e209]
+              - row [ref=e210]:
+                - cell [ref=e211]
+                - cell [ref=e212]
+                - cell [ref=e213]
+                - cell [ref=e214]
+                - cell [ref=e215]
+                - cell [ref=e216]
+                - cell [ref=e217]
+              - row [ref=e218]:
+                - cell [ref=e219]
+                - cell [ref=e220]
+                - cell [ref=e221]
+                - cell [ref=e222]
+                - cell [ref=e223]
+                - cell [ref=e224]
+                - cell [ref=e225]
+              - row [ref=e226]:
+                - cell [ref=e227]
+                - cell [ref=e228]
+                - cell [ref=e229]
+                - cell [ref=e230]
+                - cell [ref=e231]
+                - cell [ref=e232]
+                - cell [ref=e233]
+              - row [ref=e234]:
+                - cell [ref=e235]
+                - cell [ref=e236]
+                - cell [ref=e237]
+                - cell [ref=e238]
+                - cell [ref=e239]
+                - cell [ref=e240]
+                - cell [ref=e241]
+              - row [ref=e242]:
+                - cell [ref=e243]
+                - cell [ref=e244]
+                - cell [ref=e245]
+                - cell [ref=e246]
+                - cell [ref=e247]
+                - cell [ref=e248]
+                - cell [ref=e249]
+              - row [ref=e250]:
+                - cell [ref=e251]
+                - cell [ref=e252]
+                - cell [ref=e253]
+                - cell [ref=e254]
+                - cell [ref=e255]
+                - cell [ref=e256]
+                - cell [ref=e257]
+              - row [ref=e258]:
+                - cell [ref=e259]
+                - cell [ref=e260]
+                - cell [ref=e261]
+                - cell [ref=e262]
+                - cell [ref=e263]
+                - cell [ref=e264]
+                - cell [ref=e265]
+              - row [ref=e266]:
+                - cell [ref=e267]
+                - cell [ref=e268]
+                - cell [ref=e269]
+                - cell [ref=e270]
+                - cell [ref=e271]
+                - cell [ref=e272]
+                - cell [ref=e273]
+              - row [ref=e274]:
+                - cell [ref=e275]
+                - cell [ref=e276]
+                - cell [ref=e277]
+                - cell [ref=e278]
+                - cell [ref=e279]
+                - cell [ref=e280]
+                - cell [ref=e281]
+              - row [ref=e282]:
+                - cell [ref=e283]
+                - cell [ref=e284]
+                - cell [ref=e285]
+                - cell [ref=e286]
+                - cell [ref=e287]
+                - cell [ref=e288]
+                - cell [ref=e289]
+  - generic [ref=e291]:
+    - generic [ref=e292]:
+      - generic [ref=e293]:
+        - generic [ref=e294]:
+          - link "中华航运网" [ref=e295] [cursor=pointer]:
+            - /url: http://www.chineseshipping.com.cn
+          - link "中华船舶交易网" [ref=e296] [cursor=pointer]:
+            - /url: http://www.cn-eship.com
+        - combobox [ref=e297]:
+          - option "政府部门网站" [selected]
+          - option "中华人民共和国交通运输部"
+          - option "上海市交通委员会"
+        - combobox [ref=e298]:
+          - option "友情链接" [selected]
+          - option "上海航运运价交易有限公司"
+          - option "中国集装箱行业协会"
+      - generic [ref=e299]:
+        - link "联系方式" [ref=e300] [cursor=pointer]:
+          - /url: /about#msg5
+        - generic [ref=e301]: 电话：021-65151166 传真：021-65152291 邮箱：supportꅄsse.net.cn
+        - link "网站地图" [ref=e302] [cursor=pointer]:
+          - /url: /sitemap.jsp
+      - generic [ref=e303]:
+        - link "沪ICP备：沪B2-20050110-3" [ref=e304] [cursor=pointer]:
+          - /url: https://beian.miit.gov.cn
+        - link "沪公网安备 31022102000187号" [ref=e305] [cursor=pointer]:
+          - /url: http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=31022102000187
+          - img [ref=e306]
+          - text: 沪公网安备 31022102000187号
+    - link [ref=e308] [cursor=pointer]:
+      - /url: http://bszs.conac.cn/sitename?method=show&id=2801B669B8E679BCE053012819AC793D

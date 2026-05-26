@@ -30,6 +30,23 @@ def month_to_quarter(month_str: str) -> str:
     return f"{dt.year}Q{q}"
 
 
+def _quarterly_agg(df: pd.DataFrame, col: str, agg: str, min_months: int = 2) -> pd.DataFrame:
+    """月度数据转季度，过滤残缺季度（不足 min_months 个月）。
+
+    df  需含 'quarter_label' 和数值列 col
+    agg  'mean'（CPI/PMI/M2）或 'sum'（社融）
+    """
+    counts = df.groupby("quarter_label")[col].count()
+    if agg == "sum":
+        qdf = df.groupby("quarter_label", as_index=False)[col].sum()
+    else:
+        qdf = df.groupby("quarter_label", as_index=False)[col].mean()
+    valid = counts[counts >= min_months].index
+    qdf = qdf[qdf["quarter_label"].isin(valid)]
+    qdf[col] = qdf[col].round(2)
+    return qdf
+
+
 def quarter_label(period: str) -> str:
     """统一季度标签"""
     return period
@@ -57,59 +74,24 @@ def fetch_gdp() -> pd.DataFrame:
     df = raw.rename(columns={
         raw.columns[0]: "quarter_raw",
         raw.columns[1]: "gdp_abs",
-        raw.columns[2]: "gdp_yoy_cum",
+        raw.columns[2]: "gdp_yoy",
     })
-    # 解析季度信息
+    df["gdp_yoy"] = pd.to_numeric(df["gdp_yoy"], errors="coerce")
+
     parsed = df["quarter_raw"].apply(parse_quarter_raw)
     df["year"] = parsed.apply(lambda x: x[0])
     df["q_end"] = parsed.apply(lambda x: x[1])
-    df["is_single"] = parsed.apply(lambda x: x[2])
     df = df.dropna(subset=["year"])
     df["year"] = df["year"].astype(int)
     df["q_end"] = df["q_end"].astype(int)
-    df["gdp_abs"] = pd.to_numeric(df["gdp_abs"], errors="coerce")
 
-    # 计算单季度绝对值
-    single_rows = []
-    for yr in sorted(df["year"].unique()):
-        yr_df = df[df["year"] == yr].sort_values("q_end")
-        prev_abs = 0.0
-        prev_label = None
-        for _, row in yr_df.iterrows():
-            q = row["q_end"]
-            # 单季度绝对值 = 当前累计 - 上一累计
-            sing_abs = row["gdp_abs"] - prev_abs
-            label = f"{yr}Q{q}"
-            single_rows.append({"quarter_label": label, "gdp_abs_single": sing_abs})
-            prev_abs = row["gdp_abs"]
-
-    sdf = pd.DataFrame(single_rows)
-
-    # 计算单季度同比: 需要上年同季数据
-    sdf["year"] = sdf["quarter_label"].str[:4].astype(int)
-    sdf["q"] = sdf["quarter_label"].str[-1].astype(int)
-
-    merged = sdf.merge(
-        sdf[["year", "q", "gdp_abs_single"]],
-        left_on=["year", "q"],
-        right_on=[sdf["year"] + 1, "q"],
-        how="left",
-        suffixes=("", "_prev"),
-    )
-    # 修正列名
-    prev_year_df = sdf.copy()
-    prev_year_df["year"] = prev_year_df["year"] + 1
-    prev_year_df = prev_year_df.rename(columns={"gdp_abs_single": "gdp_abs_prev"})
-    merged = sdf.merge(
-        prev_year_df[["year", "q", "gdp_abs_prev"]],
-        on=["year", "q"],
-        how="left",
-    )
-    merged["gdp_yoy"] = ((merged["gdp_abs_single"] / merged["gdp_abs_prev"]) - 1) * 100
-    merged = merged[merged["year"] >= 2020]
-    merged = merged.sort_values("quarter_label").reset_index(drop=True)
-    print(f"    GDP 数据: {merged.shape[0]} 条（含推算单季同比）")
-    return merged[["quarter_label", "gdp_yoy"]]
+    # 使用原始累计同比（实际增速），Q1=单季同比，Q2-Q4=累计同比
+    df["quarter_label"] = df.apply(lambda r: f"{r['year']}Q{r['q_end']}", axis=1)
+    df = df[df["year"] >= 2020]
+    df = df.sort_values("quarter_label").reset_index(drop=True)
+    df["gdp_yoy"] = df["gdp_yoy"].round(2)
+    print(f"    GDP 数据: {df.shape[0]} 条（Q1为单季同比，Q2-Q4为累计同比）")
+    return df[["quarter_label", "gdp_yoy"]]
 
 
 # ---------------------------------------------------------------------------
@@ -123,10 +105,9 @@ def fetch_cpi() -> pd.DataFrame:
     df["month"] = df["month"].apply(parse_china_month)
     df["month_dt"] = pd.to_datetime(df["month"])
     df = df[(df["month_dt"] >= START_DATE) & (df["month_dt"] <= END_DATE)]
-    # 月度转季度均值
     df["quarter_label"] = df["month"].apply(month_to_quarter)
-    qdf = df.groupby("quarter_label", as_index=False)["cpi_yoy"].mean()
-    print(f"    CPI 数据: {qdf.shape[0]} 条（季度均值）")
+    qdf = _quarterly_agg(df, "cpi_yoy", "mean")
+    print(f"    CPI 数据: {qdf.shape[0]} 条（季度均值，≥2月/季）")
     return qdf
 
 
@@ -142,8 +123,8 @@ def fetch_pmi() -> pd.DataFrame:
     df["month_dt"] = pd.to_datetime(df["month"])
     df = df[(df["month_dt"] >= START_DATE) & (df["month_dt"] <= END_DATE)]
     df["quarter_label"] = df["month"].apply(month_to_quarter)
-    qdf = df.groupby("quarter_label", as_index=False)["pmi"].mean()
-    print(f"    PMI 数据: {qdf.shape[0]} 条（季度均值）")
+    qdf = _quarterly_agg(df, "pmi", "mean")
+    print(f"    PMI 数据: {qdf.shape[0]} 条（季度均值，≥2月/季）")
     return qdf
 
 
@@ -160,8 +141,8 @@ def fetch_m2() -> pd.DataFrame:
     df["month_dt"] = pd.to_datetime(df["month"])
     df = df[(df["month_dt"] >= START_DATE) & (df["month_dt"] <= END_DATE)]
     df["quarter_label"] = df["month"].apply(month_to_quarter)
-    qdf = df.groupby("quarter_label", as_index=False)["m2_yoy"].mean()
-    print(f"    M2 数据: {qdf.shape[0]} 条（季度均值）")
+    qdf = _quarterly_agg(df, "m2_yoy", "mean")
+    print(f"    M2 数据: {qdf.shape[0]} 条（季度均值，≥2月/季）")
     return qdf
 
 
@@ -178,8 +159,8 @@ def fetch_sheRong() -> pd.DataFrame:
     df["month_dt"] = pd.to_datetime(df["month"])
     df = df[(df["month_dt"] >= START_DATE) & (df["month_dt"] <= END_DATE)]
     df["quarter_label"] = df["month"].apply(month_to_quarter)
-    qdf = df.groupby("quarter_label", as_index=False)["shero"].sum()
-    print(f"    社融 数据: {qdf.shape[0]} 条（季度汇总）")
+    qdf = _quarterly_agg(df, "shero", "sum")
+    print(f"    社融 数据: {qdf.shape[0]} 条（季度汇总，≥2月/季）")
     return qdf
 
 
@@ -233,6 +214,8 @@ def fetch_shibor() -> pd.DataFrame:
     qdf = merged.groupby("quarter_label", as_index=False)[
         ["shibor_on", "shibor_1m", "shibor_1y"]
     ].mean()
+    for col in ["shibor_on", "shibor_1m", "shibor_1y"]:
+        qdf[col] = qdf[col].round(2)
     print(f"    Shibor 数据: {qdf.shape[0]} 条（季度均值）")
     return qdf
 
