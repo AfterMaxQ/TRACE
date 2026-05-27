@@ -245,6 +245,46 @@ def _month_end_dates(start: str, end: str) -> list:
 
 
 # ============================================================
+# 5. 券商研报
+# ============================================================
+
+def fetch_research_reports(codes: list[str]) -> pd.DataFrame:
+    """从东方财富获取券商研报（akshare stock_research_report_em）。"""
+    rows = []
+    for i, code in enumerate(codes):
+        short = _short_code(code)
+        try:
+            df = ak.stock_research_report_em(symbol=short)
+            if df.empty:
+                continue
+            for _, row in df.iterrows():
+                title = _clean_html(str(row["报告名称"]))
+                if not title:
+                    continue
+                try:
+                    ts = pd.Timestamp(row["日期"])
+                    date_str = ts.strftime("%Y-%m-%d")
+                except Exception:
+                    continue
+                rating = str(row.get("东财评级", ""))
+                org = str(row.get("机构", ""))
+                title_full = f"[{rating}] {title} ({org})" if rating and org else title
+                rows.append({
+                    "date": date_str,
+                    "code": code,
+                    "source": "research",
+                    "title": title_full[:500],
+                })
+        except Exception:
+            continue
+        time.sleep(random.uniform(0.2, 0.4))
+        if (i + 1) % 500 == 0:
+            print(f"  research: {i + 1}/{len(codes)} stocks, {len(rows)} rows")
+    print(f"  Research reports: {len(rows)} rows")
+    return pd.DataFrame(rows)
+
+
+# ============================================================
 # 主流程
 # ============================================================
 
@@ -266,8 +306,12 @@ def main():
     print("\n[3/4] Sina 7x24 global news ...")
     all_frames.append(fetch_sina_global_news(max_pages=10))
 
-    # 4. 巨潮资讯公告回溯（2020年起每月末）
-    print("\n[4/4] CNINFO notice backfill (2020-01 ~ 2026-05 monthly) ...")
+    # 4. 券商研报（全A股遍历）
+    print("\n[4/5] Research reports (all stocks) ...")
+    all_frames.append(fetch_research_reports(codes))
+
+    # 5. 巨潮资讯公告回溯（2020年起每月末）
+    print("\n[5/5] CNINFO notice backfill (2020-01 ~ 2026-05 monthly) ...")
     notice_dates = _month_end_dates("2020-01-01", "2026-05-31")
     print(f"  Sampling {len(notice_dates)} month-end dates")
     all_frames.append(fetch_notice_report_backfill(notice_dates))

@@ -62,6 +62,8 @@ def main():
         parse_dates=["date"],
         usecols=["date", "close", "code"],
     )
+    # 归一化后缀: yfinance .SS → Tushare .SH (与 data_fetcher.py 一致)
+    stock_df["code"] = stock_df["code"].str.replace(".SS", ".SH", regex=False)
 
     print("Loading csi300_index_daily.csv ...")
     csi300 = pd.read_csv(

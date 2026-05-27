@@ -144,6 +144,8 @@ def fetch_all_stocks_yf(csv_path: str | None = None,
     })
 
     result["date"] = pd.to_datetime(result["date"])
+    # 统一代码格式: yfinance .SS -> Tushare .SH
+    result["code"] = result["code"].str.replace(".SS", ".SH", regex=False)
     # 确保有必需的列
     for col in ["open", "high", "low", "close", "volume", "code"]:
         if col not in result.columns:
@@ -230,31 +232,64 @@ def fetch_csi300_index(save_csv: bool = True) -> pd.DataFrame:
 # ============================================================
 def fetch_bond_yields(save_csv: bool = True) -> pd.DataFrame:
     """
-    中债国债收益率 (2Y/10Y)，来源 AKShare bond_zh_us_rate。
-    覆盖 1990~今，过滤到目标日期。
+    中债国债收益率 (1Y/10Y)，来源 AKShare bond_china_yield。
+    API 限制单次查询跨度不能太长，按年分块请求后合并。
     """
+    frames = []
+    for yr in range(START_DT.year, END_DT.year + 1):
+        s = f"{yr}0101"
+        e = f"{yr}1231"
+        try:
+            raw = ak.bond_china_yield(start_date=s, end_date=e)
+            gb = raw[raw["曲线名称"] == "中债国债收益率曲线"].copy()
+            if gb.empty:
+                continue
+            gb["date"] = pd.to_datetime(gb["日期"])
+            gb["yield_1y"] = pd.to_numeric(gb["1年"], errors="coerce")
+            gb["yield_10y"] = pd.to_numeric(gb["10年"], errors="coerce")
+            frames.append(gb[["date", "yield_1y", "yield_10y"]])
+        except Exception as exc:
+            print(f"  [!!] bond {yr}: {exc}")
+
+    if not frames:
+        print("[!!] bond_china_yield 全部失败，回退 bond_zh_us_rate")
+        return _fetch_bond_yields_fallback(save_csv)
+
+    gb = pd.concat(frames, ignore_index=True)
+    gb = gb[(gb["date"] >= START_DT) & (gb["date"] <= END_DT)]
+    gb = gb.dropna(subset=["yield_1y", "yield_10y"])
+    gb = gb.sort_values("date").reset_index(drop=True)
+
+    if save_csv:
+        path = os.path.join(DATA_DIR, "bond_yields.csv")
+        gb.to_csv(path, index=False)
+        print(f"[OK] 国债收益率 -> {path}  ({len(gb)} 条, 1Y+10Y)")
+
+    return gb
+
+
+def _fetch_bond_yields_fallback(save_csv: bool = True) -> pd.DataFrame:
+    """回退方案: bond_zh_us_rate (仅 2Y+10Y，无 1Y)。"""
     raw = ak.bond_zh_us_rate()
     date_col = raw.columns[0]
-
     col_map = {}
     for c in raw.columns:
         if "中国国债收益率" in c and "10年" in c and "-" not in c:
             col_map[c] = "yield_10y"
         elif "中国国债收益率" in c and "2年" in c and "-" not in c:
             col_map[c] = "yield_2y"
-
+        elif "中国国债收益率" in c and "1年" in c and "-" not in c:
+            col_map[c] = "yield_1y"
     df = raw[[date_col] + list(col_map.keys())].rename(columns=col_map)
     df["date"] = pd.to_datetime(df[date_col])
-    df = df[["date", "yield_2y", "yield_10y"]]
+    cols = ["date"] + [v for v in col_map.values() if v in df.columns]
+    df = df[cols]
     df = df[(df["date"] >= START_DT) & (df["date"] <= END_DT)]
-    df = df.dropna(subset=["yield_2y", "yield_10y"])
     df = df.sort_values("date").reset_index(drop=True)
-
     if save_csv:
         path = os.path.join(DATA_DIR, "bond_yields.csv")
         df.to_csv(path, index=False)
-        print(f"[OK] 国债收益率 -> {path}  ({len(df)} 条)")
-
+        print(f"[OK] 国债收益率(回退) -> {path}  ({len(df)} 条)")
     return df
 
 
