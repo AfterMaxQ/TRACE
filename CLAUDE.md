@@ -33,22 +33,22 @@ All scripts output to `data/`. Always use `python -u` for real-time progress out
 
 | Module | Source API | Output (data/) | Time Coverage |
 |--------|-----------|----------------|---------------|
-| `data_fetcher.py` | yfinance + akshare | `stock_daily.csv`, `csi300_index_daily.csv`, `bond_yields.csv` (1Y/10Y) | 2021-07+ |
-| `financial_fetcher.py` | akshare (EastMoney) | `balance_sheet.csv`, `income_statement.csv`, `cash_flow_statement.csv` | 2018+ |
+| `data_fetcher.py` | yfinance + akshare | `stock_daily.csv`, `csi300_daily.csv`, `bond_yields.csv` (1Y/10Y) | 2021-07+ |
+| `financial_fetcher.py` | akshare (EastMoney) | `balance_sheet.csv`, `income_statement.csv`, `cash_flow.csv` | 2018+ |
 | `macro_fetcher.py` | akshare + EastMoney API | `gdp.csv`, `cpi.csv`, `pmi.csv`, `m2.csv`, `shero.csv`, `shibor.csv`, `macro_quarterly.csv` | 2020+ |
-| `market_quarterly.py` | Derived from `stock_daily.csv` + `csi300_index_daily.csv` | `market_quarterly.csv` | 2021Q3+ |
+| `market_quarterly.py` | Derived from `stock_daily.csv` + `csi300_daily.csv` | `market_quarterly.csv` | 2021Q3+ |
 | `news_fetcher.py` | akshare + Sina/CLS APIs | `news_raw.csv` (includes research reports from EastMoney) | 2020+ |
-| `trade_fetcher.py` | akshare + direct APIs | `bdi.csv`, `usdcny_daily.csv`, `trade_monthly.csv`, `trade_quarterly.csv`, `freight_weekly.csv`, `freight_quarterly.csv`, `us_tariffs.csv`, `scfi_latest.csv` | 2020+ |
-| `supply_chain.py` | Tushare Pro | `share_holders.csv`, `pledge_stat.csv`, validates `supply_chain_edges.csv` | latest report period |
-| `features.py` | Derived from financials + market + macro | `base_feature.csv` (42 features + target, 98K rows, 5,322 stocks) | 2021Q3–2026Q1 |
+| `trade_fetcher.py` | akshare + direct APIs | `bdi.csv`, `usdcny_daily.csv`, `trade_monthly.csv`, `trade_quarterly.csv`, `freight_weekly.csv`, `freight_quarterly.csv`, `us_tariffs.csv`, `scfi.csv` | 2020+ |
+| `supply_chain.py` | Tushare Pro | `shareholders.csv`, `pledge_stat.csv`, validates `supply_chain_edges.csv` | latest report period |
+| `features.py` | Derived from financials + market + macro + ST labels | `base_feature.csv` (61 columns, 98K rows, 5,322 stocks) | 2021Q3–2026Q1 |
 
 ### Module Dependency Chain
 
 ```
 data_fetcher.py ──→ stock_daily.csv ──→ market_quarterly.py ──→ market_quarterly.csv
-                  └─ csi300_index_daily.csv ──┘
+                  └─ csi300_daily.csv ──┘
 
-financial_fetcher.py ──→ balance_sheet.csv, income_statement.csv, cash_flow_statement.csv
+financial_fetcher.py ──→ balance_sheet.csv, income_statement.csv, cash_flow.csv
 
 macro_fetcher.py ──→ gdp.csv, cpi.csv, pmi.csv, m2.csv, shero.csv, shibor.csv
                   └─ macro_quarterly.csv (merged)
@@ -57,9 +57,9 @@ news_fetcher.py ──→ news_raw.csv
 
 trade_fetcher.py ──→ bdi.csv, usdcny_daily.csv, trade_*.csv, freight_*.csv, us_tariffs.csv
 
-supply_chain.py ──→ share_holders.csv, pledge_stat.csv (depends on TRACE_上市公司基本信息.csv + supply_chain_edges.csv)
+supply_chain.py ──→ shareholders.csv, pledge_stat.csv (depends on company_info.csv + supply_chain_edges.csv)
 
-features.py ──→ base_feature.csv (F-02, depends on the 3 financials + market_quarterly.csv + macro_quarterly.csv)
+features.py ──→ base_feature.csv (F-02, depends on the 3 financials + market_quarterly.csv + macro_quarterly.csv + st_labels.csv)
 ```
 
 ### Key Data Files (>10MB, gitignored)
@@ -69,7 +69,7 @@ features.py ──→ base_feature.csv (F-02, depends on the 3 financials + mark
 | `stock_daily.csv` | 621MB | 6.5M | Full A-share daily OHLCV, 5500 stocks |
 | `balance_sheet.csv` | 42MB | — | Quarterly balance sheets |
 | `income_statement.csv` | 35MB | — | Quarterly income statements |
-| `cash_flow_statement.csv` | 30MB | — | Quarterly cash flow statements |
+| `cash_flow.csv` | 30MB | — | Quarterly cash flow statements |
 | `news_raw.csv` | 38MB | 364K | News titles with date/code/source |
 | `market_quarterly.csv` | 12MB | 97K | Quarterly returns, vol, drawdown, beta |
 
@@ -88,7 +88,17 @@ All modules use `000001.SZ` format (Tushare convention). yfinance requires `.SS`
 - **GDP convention**: Q1 = single-quarter real YoY; Q2-Q4 = cumulative real YoY (China standard reporting, from akshare `国内生产总值-同比增长` column).
 - **Stock code normalization**: `data_fetcher.py` converts yfinance's `.SS` suffix to Tushare-standard `.SH` after fetching (line ~148). All downstream modules expect the `000001.SZ`/`000001.SH` format.
 - **Bond yields**: `data_fetcher.py` now uses `ak.bond_china_yield` (1Y/10Y) with yearly chunking, with `bond_zh_us_rate` (2Y/10Y) as fallback. Previously was 2Y/10Y exclusively.
-- **Reference data**: `supply_chain.py` depends on `data/TRACE_上市公司基本信息.csv` (full A-share code list with `ts_code` column) and `data/supply_chain_edges.csv` (manually curated supplier/customer edges). Both must exist before running the module.
+- **Reference data**: `supply_chain.py` depends on `data/company_info.csv` (full A-share code list with `ts_code` column) and `data/supply_chain_edges.csv` (manually curated supplier/customer edges). Both must exist before running the module.
+
+### ST Label Construction (features.py)
+
+Target = next quarter ST/*ST status (time-series, not snapshot). Data source priority:
+
+1. `data/st_labels.csv` — baostock `isST` daily field (SH, no rate limit) + akshare SZSE name-change intervals
+2. `data/namechange_history.csv` — Tushare `namechange` (full market, 1/hr rate limit) or akshare SZSE fallback
+3. `company_info.csv` `is_st` snapshot (last resort)
+
+ST labels must be regenerated (baostock query) if the quarter range changes.
 
 ### Known Data Limitations
 

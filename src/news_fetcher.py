@@ -21,7 +21,7 @@ import requests
 import akshare as ak
 
 DATA_DIR = Path(__file__).parent.parent / "data"
-STOCK_INFO_CSV = DATA_DIR / "TRACE_上市公司基本信息.csv"
+STOCK_INFO_CSV = DATA_DIR / "company_info.csv"
 
 
 # ============================================================

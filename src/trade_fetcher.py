@@ -286,7 +286,7 @@ def _scrape_sse_scfi() -> pd.DataFrame:
             print("  [!!] 未提取到有效 SCFI 数据行")
             return df
 
-        path = DATA_DIR / "scfi_latest.csv"
+        path = DATA_DIR / "scfi.csv"
         df.to_csv(path, index=False, encoding="utf-8-sig")
         print(f"  [OK] SCFI 最新一期已抓取 ({curr_date_str}): {path}")
         return df

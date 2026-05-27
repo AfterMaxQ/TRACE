@@ -65,9 +65,9 @@ def main():
     # 归一化后缀: yfinance .SS → Tushare .SH (与 data_fetcher.py 一致)
     stock_df["code"] = stock_df["code"].str.replace(".SS", ".SH", regex=False)
 
-    print("Loading csi300_index_daily.csv ...")
+    print("Loading csi300_daily.csv ...")
     csi300 = pd.read_csv(
-        DATA_DIR / "csi300_index_daily.csv",
+        DATA_DIR / "csi300_daily.csv",
         parse_dates=["date"],
     )
     csi300 = csi300.set_index("date").sort_index()
@@ -114,9 +114,9 @@ def main():
     print(f"Saving {len(results)} rows to market_quarterly.csv ...")
     result_df = pd.DataFrame(results)
 
-    print("Loading TRACE_上市公司基本信息.csv ...")
+    print("Loading company_info.csv ...")
     info = pd.read_csv(
-        DATA_DIR / "TRACE_上市公司基本信息.csv", usecols=["ts_code", "name", "industry", "industry_csrc"]
+        DATA_DIR / "company_info.csv", usecols=["ts_code", "name", "industry", "industry_csrc"]
     )
     info = info.rename(columns={"ts_code": "code"})
     result_df = result_df.merge(info, on="code", how="left")

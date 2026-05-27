@@ -6,7 +6,7 @@
   - 手工整理: supply_chain_edges.csv (前5大客户/供应商)
 
 输出：
-  - data/share_holders.csv     前十大股东（最新报告期）
+  - data/shareholders.csv     前十大股东（最新报告期）
   - data/pledge_stat.csv       股权质押统计（最新）
 """
 import time
@@ -22,7 +22,7 @@ TS_TOKEN = "4353d440506e8ba010599e3edc686356fa76d24ba66a00f693595de1"
 
 def _load_codes() -> list[str]:
     """加载全A股代码列表。"""
-    csv_path = DATA_DIR / "TRACE_上市公司基本信息.csv"
+    csv_path = DATA_DIR / "company_info.csv"
     info = pd.read_csv(csv_path, dtype={"ts_code": str})
     return sorted(info["ts_code"].dropna().unique())
 
@@ -79,9 +79,9 @@ def fetch_top10_holders(codes: list[str]) -> pd.DataFrame:
     result = result.sort_values(["ts_code", "hold_ratio"], ascending=[True, False])
     result = result.reset_index(drop=True)
 
-    path = DATA_DIR / "share_holders.csv"
+    path = DATA_DIR / "shareholders.csv"
     result.to_csv(path, index=False, encoding="utf-8-sig")
-    print(f"  [OK] share_holders.csv: {len(result)} 行, {result['ts_code'].nunique()} 只")
+    print(f"  [OK] shareholders.csv: {len(result)} 行, {result['ts_code'].nunique()} 只")
     return result
 
 

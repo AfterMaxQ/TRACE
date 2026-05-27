@@ -7,7 +7,7 @@
 
 输出文件到 data/:
   - bond_yields.csv        中债国债收益率（日频: 2Y/10Y）
-  - csi300_index_daily.csv 沪深300指数日线
+  - csi300_daily.csv 沪深300指数日线
   - stock_daily.csv        全A股前复权日线 OHLCV
 """
 import os
@@ -69,7 +69,7 @@ def fetch_all_stocks_yf(csv_path: str | None = None,
     yfinance 单次不宜超过 ~800 ticker，这里默认 500 一批。
     """
     if csv_path is None:
-        csv_path = os.path.join(DATA_DIR, "TRACE_上市公司基本信息.csv")
+        csv_path = os.path.join(DATA_DIR, "company_info.csv")
 
     info_df = pd.read_csv(csv_path)
     raw_codes = info_df["ts_code"].dropna().astype(str).tolist()
@@ -220,7 +220,7 @@ def fetch_csi300_index(save_csv: bool = True) -> pd.DataFrame:
     df = df.sort_values("date").reset_index(drop=True)
 
     if save_csv and not df.empty:
-        path = os.path.join(DATA_DIR, "csi300_index_daily.csv")
+        path = os.path.join(DATA_DIR, "csi300_daily.csv")
         df.to_csv(path, index=False)
         print(f"[OK] 沪深300指数 -> {path}  ({len(df)} 条)")
 

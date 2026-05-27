@@ -4,12 +4,12 @@ F-02 特征工程模块
 计算30+财务比率、构建ST违约标签、生成特征宽表。
 
 输入:
-  data/balance_sheet.csv, data/income_statement.csv, data/cash_flow_statement.csv
+  data/balance_sheet.csv, data/income_statement.csv, data/cash_flow.csv
   data/market_quarterly.csv, data/macro_quarterly.csv
-  data/TRACE_上市公司基本信息.csv (is_st 字段)
+  data/company_info.csv (is_st 字段)
 
 输出:
-  data/base_feature.csv  — 特征宽表 (code + quarter + 42特征 + target)
+  data/base_feature.csv  — 特征宽表 (code + quarter + 58特征 + target)
 """
 
 import os
@@ -37,7 +37,7 @@ def _load_financials():
 
     bs = pd.read_csv(DATA_DIR / "balance_sheet.csv")
     ist = pd.read_csv(DATA_DIR / "income_statement.csv")
-    cf = pd.read_csv(DATA_DIR / "cash_flow_statement.csv")
+    cf = pd.read_csv(DATA_DIR / "cash_flow.csv")
 
     for df in [bs, ist, cf]:
         df["REPORT_DATE"] = pd.to_datetime(df["REPORT_DATE"])
@@ -277,14 +277,14 @@ def _build_labels(df):
     """构建违约标签 target: 下一季度是否处于 ST 状态
 
     数据源优先级:
-      1. bak_basic 季度端快照 (st_labels_quarterly.csv, 全市场时间序列)
+      1. baostock + akshare 季度 ST 标签 (st_labels.csv, 全市场时间序列)
       2. Tushare namechange / akshare SZSE (namechange_history.csv 缓存)
       3. is_st 快照 (回退)
     """
     print("[..] 构建ST违约标签...")
 
     # --- 数据源 1: bak_basic 季度末端快照 (全市场, 时间序列) ---
-    quarterly_path = DATA_DIR / "st_labels_quarterly.csv"
+    quarterly_path = DATA_DIR / "st_labels.csv"
     if quarterly_path.exists():
         print("[..] 加载季度 ST 标签 (baostock + akshare)...")
         st_q = pd.read_csv(quarterly_path)
@@ -306,7 +306,7 @@ def _build_labels(df):
 
     if st_history is None:
         # 回退: is_st 快照
-        info_path = DATA_DIR / "TRACE_上市公司基本信息.csv"
+        info_path = DATA_DIR / "company_info.csv"
         if info_path.exists():
             info = pd.read_csv(info_path)
             st_codes = set(info[info["is_st"] == True]["ts_code"].astype(str))

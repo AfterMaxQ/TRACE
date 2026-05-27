@@ -78,7 +78,7 @@ CASH_FLOW_COLS = [
 STMT_CONFIG = [
     ("balance_sheet", ak.stock_balance_sheet_by_report_em, BALANCE_SHEET_COLS),
     ("income_statement", ak.stock_profit_sheet_by_report_em, INCOME_STATEMENT_COLS),
-    ("cash_flow_statement", ak.stock_cash_flow_sheet_by_report_em, CASH_FLOW_COLS),
+    ("cash_flow", ak.stock_cash_flow_sheet_by_report_em, CASH_FLOW_COLS),
 ]
 
 
@@ -87,7 +87,7 @@ def ensure_data_dir():
 
 
 def load_stock_codes() -> list[tuple[str, str]]:
-    csv_path = os.path.join(DATA_DIR, "TRACE_上市公司基本信息.csv")
+    csv_path = os.path.join(DATA_DIR, "company_info.csv")
     info_df = pd.read_csv(csv_path, dtype={"ts_code": str})
     codes = info_df["ts_code"].dropna().tolist()
     result = []
