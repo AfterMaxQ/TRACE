@@ -9,6 +9,7 @@
   - data/shareholders.csv     前十大股东（最新报告期）
   - data/pledge_stat.csv       股权质押统计（最新）
 """
+import os
 import time
 import pandas as pd
 import tushare as ts
@@ -16,8 +17,7 @@ from pathlib import Path
 
 DATA_DIR = Path(__file__).parent.parent / "data"
 
-# Tushare Pro token
-TS_TOKEN = "4353d440506e8ba010599e3edc686356fa76d24ba66a00f693595de1"
+TS_TOKEN = os.getenv("TS_TOKEN", "")
 
 
 def _load_codes() -> list[str]:
@@ -165,6 +165,11 @@ def main():
         # 回退到全量（会很慢）
         target_codes = sorted(codes)[:50]
         print(f"供应链CSV不存在，取前50只测试: {len(target_codes)}")
+
+    if not TS_TOKEN:
+        print("[!!] 未设置 TS_TOKEN 环境变量，跳过 Tushare 数据采集")
+        print("     export TS_TOKEN=your_tushare_token")
+        return
 
     print(f"Tushare Pro token: {'*' * 8}...")
 

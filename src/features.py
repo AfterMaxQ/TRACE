@@ -24,7 +24,7 @@ import tushare as ts
 warnings.filterwarnings("ignore")
 
 DATA_DIR = Path(__file__).parent.parent / "data"
-TS_TOKEN = "4353d440506e8ba010599e3edc686356fa76d24ba66a00f693595de1"
+TS_TOKEN = os.getenv("TS_TOKEN", "")
 
 # ============================================================
 # 1. 数据加载
@@ -220,22 +220,25 @@ def _fetch_st_history():
         return df
 
     # 1. 尝试 Tushare namechange
-    print("[..] 尝试 Tushare Pro namechange...")
-    try:
-        pro = ts.pro_api(TS_TOKEN)
-        df = pro.namechange(
-            start_date="20000101", end_date="20261231",
-            fields="ts_code,name,start_date,end_date,ann_date,change_reason",
-        )
-        if df is not None and len(df) > 0:
-            df["start_date"] = pd.to_datetime(df["start_date"], errors="coerce")
-            df["end_date"] = pd.to_datetime(df["end_date"], errors="coerce")
-            df["ann_date"] = pd.to_datetime(df["ann_date"], errors="coerce")
-            df.to_csv(cache_path, index=False, encoding="utf-8-sig")
-            print(f"[OK] Tushare namechange 获取成功  ({len(df)} 条, 已缓存)")
-            return df
-    except Exception as e:
-        print(f"[!!] Tushare namechange 失败: {e}")
+    if not TS_TOKEN:
+        print("[!!] 未设置 TS_TOKEN，跳过 Tushare namechange")
+    else:
+        print("[..] 尝试 Tushare Pro namechange...")
+        try:
+            pro = ts.pro_api(TS_TOKEN)
+            df = pro.namechange(
+                start_date="20000101", end_date="20261231",
+                fields="ts_code,name,start_date,end_date,ann_date,change_reason",
+            )
+            if df is not None and len(df) > 0:
+                df["start_date"] = pd.to_datetime(df["start_date"], errors="coerce")
+                df["end_date"] = pd.to_datetime(df["end_date"], errors="coerce")
+                df["ann_date"] = pd.to_datetime(df["ann_date"], errors="coerce")
+                df.to_csv(cache_path, index=False, encoding="utf-8-sig")
+                print(f"[OK] Tushare namechange 获取成功  ({len(df)} 条, 已缓存)")
+                return df
+        except Exception as e:
+            print(f"[!!] Tushare namechange 失败: {e}")
 
     # 2. 回退: akshare SZSE 简称变更 (仅深市, 免费无限制)
     print("[..] 回退: akshare SZSE 简称变更...")
@@ -382,6 +385,53 @@ def _merge_market_macro(df):
     return df
 
 
+def _merge_trade_features(df):
+    """合并F-04贸易/投入产出特征 (trade_features.csv → industry × quarter)"""
+    trade_path = DATA_DIR / "trade_features.csv"
+    if not trade_path.exists():
+        print("[!!] trade_features.csv 不存在, 跳过贸易特征合并")
+        return df
+
+    trade = pd.read_csv(trade_path)
+    available = [c for c in trade.columns if c not in ("shenwan_industry", "quarter")]
+    df = df.merge(
+        trade, left_on=["industry", "quarter"],
+        right_on=["shenwan_industry", "quarter"], how="left",
+    )
+    df = df.drop(columns=["shenwan_industry"], errors="ignore")
+    print(f"[OK] 贸易特征合并完成  ({len(available)} 个新特征)")
+    return df
+
+
+def _merge_sentiment_features(df):
+    """合并F-03情感分类特征 (sentiment_features.csv → code × quarter)"""
+    sent_path = DATA_DIR / "sentiment_features.csv"
+    if not sent_path.exists():
+        print("[!!] sentiment_features.csv 不存在, 跳过情感特征合并")
+        return df
+
+    sent = pd.read_csv(sent_path)
+    available = [c for c in sent.columns if c not in ("code", "quarter")]
+    df = df.merge(sent, on=["code", "quarter"], how="left")
+    print(f"[OK] 情感特征合并完成  ({len(available)} 个新特征)")
+    return df
+
+
+def _merge_graph_features(df):
+    """合并F-05知识图谱特征 (graph_features.csv → industry)"""
+    gf_path = DATA_DIR / "graph_features.csv"
+    if not gf_path.exists():
+        print("[!!] graph_features.csv 不存在, 跳过图特征合并")
+        return df
+
+    gf = pd.read_csv(gf_path)
+    available = [c for c in gf.columns if c != "shenwan_industry"]
+    df = df.merge(gf, left_on="industry", right_on="shenwan_industry", how="left")
+    df = df.drop(columns=["shenwan_industry"], errors="ignore")
+    print(f"[OK] 图特征合并完成  ({len(available)} 个新特征)")
+    return df
+
+
 def _handle_missing(df):
     """处理缺失值：行业中位数填充 → 全局中位数 → 0"""
     print("[..] 处理缺失值...")
@@ -417,6 +467,30 @@ def _handle_missing(df):
     macro_cols = [c for c in df.columns if c.startswith(("gdp_", "cpi", "pmi", "m2", "shero", "shibor"))]
     for col in macro_cols:
         df[col] = df[col].fillna(method="ffill")
+
+    # 贸易特征: 行业内前向填充 (IO/关税是年度填到季度) → 行业中位数 → 全局中位数 → 0
+    trade_cols = [c for c in df.columns if c in [
+        "export", "import", "trade_balance",
+        "export_yoy", "import_yoy", "export_share", "import_share",
+        "import_dependency", "backward_linkage", "domestic_value_added_ratio",
+        "us_tariff_rate", "us_tariff_yoy", "us_tariff_baseline_2017",
+        "overseas_rev_median", "overseas_rev_mean", "overseas_rev_p75",
+        "event_count", "sentiment_mean", "neg_ratio",
+        "compliance_ratio", "financial_ratio",
+        "industry_scope_ratio", "financing_impact_ratio",
+        "supply_chain_ratio", "sentiment_volatility",
+        "pagerank", "weighted_out_degree", "weighted_in_degree",
+        "betweenness", "clustering",
+    ]]
+    for col in trade_cols:
+        if industry_col:
+            df[col] = df.groupby(industry_col, group_keys=False)[col].ffill()
+    for col in trade_cols:
+        if industry_col:
+            medians = df.groupby(industry_col, dropna=False)[col].transform("median")
+            df[col] = df[col].fillna(medians)
+        df[col] = df[col].fillna(df[col].median())
+        df[col] = df[col].fillna(0)
 
     # Winsorize 极端值 (1%/99%)
     n_winsorized = 0
@@ -472,6 +546,20 @@ FEATURE_ORDER = [
     # 宏观
     "gdp_yoy", "cpi_yoy", "pmi", "m2_yoy", "shero",
     "shibor_on", "shibor_1m", "shibor_1y",
+    # 贸易/IO (F-04)
+    "export", "import", "trade_balance",
+    "export_yoy", "import_yoy", "export_share", "import_share",
+    "import_dependency", "backward_linkage", "domestic_value_added_ratio",
+    "us_tariff_rate", "us_tariff_yoy", "us_tariff_baseline_2017",
+    "overseas_rev_median", "overseas_rev_mean", "overseas_rev_p75",
+    # 情感分类 (F-03)
+    "event_count", "sentiment_mean", "neg_ratio",
+    "compliance_ratio", "financial_ratio",
+    "industry_scope_ratio", "financing_impact_ratio",
+    "supply_chain_ratio", "sentiment_volatility",
+    # 知识图谱 (F-05)
+    "pagerank", "weighted_out_degree", "weighted_in_degree",
+    "betweenness", "clustering",
     # 标签
     "target",
 ]
@@ -501,6 +589,15 @@ def main():
 
     # 6. 合并市场 + 宏观特征
     df = _merge_market_macro(df)
+
+    # 6b. 合并贸易/IO特征 (F-04)
+    df = _merge_trade_features(df)
+
+    # 6c. 合并情感分类特征 (F-03)
+    df = _merge_sentiment_features(df)
+
+    # 6d. 合并知识图谱特征 (F-05)
+    df = _merge_graph_features(df)
 
     # 7. 缺失值处理
     df = _handle_missing(df)
