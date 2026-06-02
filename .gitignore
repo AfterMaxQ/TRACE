@@ -40,3 +40,7 @@ data/
 # Jupyter outputs (optional)
 jupyter_notebook/.ipynb_checkpoints/
 .trace_config.json
+
+# Temp
+.playwright-mcp/
+frontend/network_temp.html
