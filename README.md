@@ -194,7 +194,14 @@ python -u src/features.py              # F-02：合并 → base_feature.csv（91
 python -u src/modeling.py              # F-06：XGBoost 训练 + SHAP
 ```
 
-### 启动前端
+### 一键启动
+
+```bash
+python main.py
+# → 自动检查环境 + 数据文件 → 启动 http://localhost:8501
+```
+
+或手动启动 Streamlit：
 
 ```bash
 streamlit run frontend/app.py
