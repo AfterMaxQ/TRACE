@@ -1,0 +1,18 @@
+# Ignore all CSVs in data/ by default
+*.csv
+
+# Whitelist: Streamlit dashboard essential files
+!company_info.csv
+!base_feature.csv
+!fusion_scores.csv
+!predictions.csv
+!feature_importance.csv
+!graph_features.csv
+!io_adjacency.csv
+!macro_quarterly.csv
+
+# Ignore other data artifacts
+*.png
+tariff_data/
+42部门投入产出表2017-2023/
+
