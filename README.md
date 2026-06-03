@@ -8,6 +8,7 @@
 ![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-EE4C2C?logo=pytorch&logoColor=white)
 ![DeepSeek](https://img.shields.io/badge/LLM-DeepSeek%20v4-536DFE)
 ![License](https://img.shields.io/badge/License-MIT-green)
+[![Streamlit Cloud](https://img.shields.io/badge/🚀_在线体验-trace--risk--platform.streamlit.app-FF4B4B)](https://trace-risk-platform.streamlit.app)
 
 **T**rade-linked **R**isk **A**ssessment and **C**ontagion **E**ngine
 
@@ -201,11 +202,23 @@ python main.py
 # → 自动检查环境 + 数据文件 → 启动 http://localhost:8501
 ```
 
-或手动启动 Streamlit：
+或手动：
 
 ```bash
 streamlit run frontend/app.py
 ```
+
+### Streamlit Cloud 部署
+
+项目已部署在 Streamlit Community Cloud（免费）：
+
+👉 **[trace-risk-platform.streamlit.app](https://trace-risk-platform.streamlit.app)**
+
+自行部署步骤：
+1. Fork 本仓库到 GitHub
+2. 打开 [share.streamlit.io](https://share.streamlit.io) → Sign in with GitHub
+3. New app → 选择仓库 `AfterMaxQ/TRACE`、分支 `main`、入口文件 `frontend/app.py`
+4. Deploy
 
 ---
 
