@@ -1,6 +1,6 @@
 # 🛡️ TRACE — 多源融合的企业风险智能评估与传导预警平台
 
-<div align="center">
+<div align="center" style="font-size: 20px;">
 
 ![Python](https://img.shields.io/pypi/pyversions/streamlit?logo=python&logoColor=white)
 ![Streamlit](https://img.shields.io/pypi/v/streamlit?logo=streamlit&label=Streamlit&color=FF4B4B)
