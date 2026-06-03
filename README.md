@@ -2,10 +2,10 @@
 
 <div align="center">
 
-![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)
-![Streamlit](https://img.shields.io/badge/Streamlit-1.28+-FF4B4B?logo=streamlit&logoColor=white)
-![XGBoost](https://img.shields.io/badge/XGBoost-2.0+-236B1E)
-![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-EE4C2C?logo=pytorch&logoColor=white)
+![Python](https://img.shields.io/pypi/pyversions/streamlit?logo=python&logoColor=white)
+![Streamlit](https://img.shields.io/pypi/v/streamlit?logo=streamlit&label=Streamlit&color=FF4B4B)
+![XGBoost](https://img.shields.io/pypi/v/xgboost?logo=xgboost&label=XGBoost&color=236B1E)
+![PyTorch](https://img.shields.io/pypi/v/torch?logo=pytorch&label=PyTorch&color=EE4C2C)
 ![DeepSeek](https://img.shields.io/badge/LLM-DeepSeek%20v4-536DFE)
 ![License](https://img.shields.io/badge/License-MIT-green)
 [![Streamlit Cloud](https://img.shields.io/badge/🚀_在线体验-trace--risk--platform.streamlit.app-FF4B4B)](https://trace-risk-platform.streamlit.app)
